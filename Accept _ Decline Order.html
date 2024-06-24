@@ -1,0 +1,509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0137)https://avm.assetval.com/avm/AcceptDeclineBPO.aspx?rvmIB29TfNYoSemRePE9%2fYL1eYv%2bEbEod4jDENE%2bG4CcIrdkZryWuEc%2fteF02IoI5K4xcFUQIvw%3d -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head id="ctl00_Head1"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    
+    <script src="./Accept _ Decline Order_files/jquery-1.8.3.min.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/jquery.ui.core.min.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/jquery.ui.widget.min.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/jquery.ui.datepicker.min.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/jquery.autocomplete.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/jquery.countdown.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/simplegallery.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/tooltip.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/WaterMark.min.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/CommonJScript.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/common.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/jquery.uploadify.min.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/jquery.password-strength.js.download" type="text/javascript"></script>
+    <script src="./Accept _ Decline Order_files/jquery.bxslider.js.download" type="text/javascript"></script>
+    <link href="./Accept _ Decline Order_files/jquery.ui.all.css" rel="stylesheet" type="text/css">
+    <link href="./Accept _ Decline Order_files/template.css" rel="stylesheet" type="text/css">
+    <link href="./Accept _ Decline Order_files/avm_v4.css" rel="stylesheet" type="text/css">
+    <link href="./Accept _ Decline Order_files/misc.css" rel="stylesheet" type="text/css">
+    <link href="./Accept _ Decline Order_files/autocomplete.css" rel="stylesheet" type="text/css">
+    <link href="./Accept _ Decline Order_files/countdown.css" rel="stylesheet" type="text/css">
+    <link href="./Accept _ Decline Order_files/uploadify.css" rel="stylesheet" type="text/css">
+    <link href="./Accept _ Decline Order_files/tooltip.css" rel="stylesheet" type="text/css">
+    <link href="./Accept _ Decline Order_files/jquery.bxslider.css" rel="stylesheet" type="text/css">
+    <script src="./Accept _ Decline Order_files/jquery-ui.js.download" type="text/javascript"></script>
+    <link rel="icon" href="https://avm.assetval.com/avm/images/assetval.ico" type="image/x-icon">
+    <title>Accept / Decline Order</title>
+    <!--<base target="_self">--><base href="." target="_self">
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            //Calendar Control for Vacation dates
+            $('#ctl00_Body_txtVacationFrom').keydown(function (e) {
+                if (e.keyCode == 8)
+                    return false;
+            });
+
+            $('#ctl00_Body_txtVacationFrom').datepicker({
+                minDate: 0,
+                numberOfMonths: 1,
+                dateFormat: 'mm/dd/yy'
+            });
+
+            $('#ctl00_Body_txtVacationTo').keydown(function (e) {
+                if (e.keyCode == 8)
+                    return false;
+            });
+
+            $('#ctl00_Body_txtVacationTo').datepicker({
+                minDate: 0,
+                numberOfMonths: 1,
+                dateFormat: 'mm/dd/yy'
+            });
+        });
+        function checkMaxLength(txt, maxLen) {
+            try {
+                if (txt.value.length > (maxLen - 1))
+                    return false;
+            } catch (e) {
+            }
+        }
+        function confirmAccept() {
+
+            var hasSpecialInstruction = $('#ctl00_Body_hdnHasSpecialInstruction').val();
+            var isInteriorOrder = $('#ctl00_Body_hdnInteriorOrder').val();
+            var isAcknowledged = $('#ctl00_Body_chkAcknowledgement').is(':checked');
+            var isInteriorAcknowledged = $('#ctl00_Body_chkInteriorAcknowledgement').is(':checked');
+
+            if (hasSpecialInstruction == '1')
+                if (isAcknowledged) {
+                    if (isInteriorOrder != '1')
+                        return true;
+                }
+                else {
+                    alert('Please acknowledge that you understand the order has special instructions by checking the box and hit "Accept Order" button.');
+                    return false;
+                }
+
+            if (isInteriorOrder == '1')
+                if (isInteriorAcknowledged) {
+                    return true;
+                }
+                else {
+                    alert('Please acknowledge that you are ONLY to contact the Point of Contact by checking the box and hit "Accept Order" button.');
+                    return false;
+                }
+        }
+    </script>
+
+    <script language="javascript" type="text/javascript">
+        var NVG_BpoCd;     
+        $(document).ready(function () {
+            document.getElementById("divContent").style.display = 'block';
+            document.getElementById("divWait").style.display = 'none';
+
+            if ($('#ctl00_hdnSecs').val() != '')
+                $('#timer').countdown({ until: +$('#ctl00_hdnSecs').val(), format: 'MS' });
+        });
+
+        function openNewWinCentered(url, h, w, objWinName, scrollable, resizable) {
+            var objWin;
+            var y = window.top.outerHeight / 2 + window.top.screenY - (h / 2);
+            var x = window.top.outerWidth / 2 + window.top.screenX - (w / 2);
+
+            if ((objWin == null) || (objWin.closed)) {
+                objWin = window.open(url, objWinName, 'width=' + w + ',height=' + h + ',scrollbars=' + scrollable + ',resizable=' + resizable + ', top=' + y + ', left=' + x);
+                objWin.focus();
+            } else {
+                objWin.focus();
+            }
+        }
+
+        function openNewTab(url) {
+            document.getElementById("aNewTab").href = url;
+            document.getElementById('aNewTab').click();
+        }
+
+        function PollOrderSubmissionStatus(strBpoCd) {
+            try {
+                //alert('hi');                
+                NVG_BpoCd = strBpoCd;
+                var param = '{ strBpoCd: "' + NVG_BpoCd + '"}';
+                //alert(param);
+                var result = $.ajax({
+                    type: "POST",
+                    url: '/avm/Async.aspx' + "/getOrderSubmissionStatus",
+                    data: param,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: ValidatePollOrderSubmissionStatus,
+                    failure: function (msg) {
+                        alert(msg);
+                    },
+                    error: function (xhr, err) {
+                        alert("Error:" + xhr.responseText);
+                    }
+                });
+            }
+            catch (exp) {
+                alert('ERROR:' + exp.Message);
+            }
+            return false;
+        }
+
+
+        function ValidatePollOrderSubmissionStatus(msg) {
+            varResponse = msg.d;
+            //alert(varResponse);
+            if ((varResponse != null) && (varResponse != '')) {
+                //window.location.href = "https://avm.assetval.com/avm/AcceptDeclineBPO.aspx?rvmIB29TfNYoSemRePE9%2fYL1eYv%2bEbEod4jDENE%2bG4CcIrdkZryWuEc%2fteF02IoI5K4xcFUQIvw%3d";
+                btnSearch_Click(); //This is in the uc_SearchPanel.ascx. This way the search filter values are maintained which is not the case with window.location.href.
+            }
+            else {
+                setTimeout(PollOrderSubmissionStatus(NVG_BpoCd), 100);
+            }
+        }
+    </script>
+    <style type="text/css">
+        .fixed
+        {
+            background-color: #F6F6F6;
+            width: 100%; /*height: 100px;*/
+            position: fixed;
+            top: 0px;
+            margin: 0px;
+            padding: 0px;
+        }
+        
+        body
+        {
+            padding-top: 75px;
+            margin: 0px;
+        }
+    </style>
+<title>
+
+</title></head>
+<body>
+    <form method="post" action="https://avm.assetval.com/avm/AcceptDeclineBPO.aspx?rvmIB29TfNYoSemRePE9%2fYL1eYv%2bEbEod4jDENE%2bG4CcIrdkZryWuEc%2fteF02IoI5K4xcFUQIvw%3d" id="aspnetForm">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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">
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['aspnetForm'];
+if (!theForm) {
+    theForm = document.aspnetForm;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./Accept _ Decline Order_files/WebResource.axd" type="text/javascript"></script>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="AF87B4EE">
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="wIGIkfAW5Q2cx16tsr6Rd5s1MAklDU7MI0uXHgxX3ectaDRD42l6GTOTg2ldDdmNeP9pjVjxjXm9qOx7PiMmQFmFxKDaR+1sZlfApGGwxYJdl/+08rMQGyLJL1Qy5nz3NA43fJE68LtneFFlbijkgg/ljqlfc5CILhCXZLbnQlQN409rz32iYiefTAQAcSA+zQKehSI9n1ERlUR9xwutgqoHM98esehg5Pdv5hK0XeC0diJa7dTwf7+GiAdSHk+4axus/X6/w8pu8Za02rs8H5bAn4dSJifL4f+62x9XinV2ysIJ6bOSJYJRT8Ib1AZZaTkg5VRAvAtdzUM8eCK9kWzp5W8av4m7C/ZjjW0T2/D1TGR4t5sjTlcFZKOV+fvj27ectePgs04FLAhPnvld0WAg4A5jH0EDy/QYxo0/qB98u1TLtUAa/1UsSmuI06aI7Jf4GsZ+wGP06dqXi+Oy4pQVe7nx1Sckrdmgf8bYbw85nYM7mw/oZO7rTd/ASdoh+maSBd7FPl1uFeyVLxoiCiwluDdFp7TofCoyYsMCJNsQA5agOM2NlZkpHhHJ3MIUQoVAZfbNMC+V9JVkk7L8z6zeGsEq2bF1aMQ7cOH4Vm/G0HOe+zwYs5c+HEqACbLbZqAUc9/Dt47tfSaVSjZi6slSTPjrdz3de1krNTZ1MAvtNX5uJj8Kcp8S9f5fnOfT">
+</div>
+    <div id="divFixed" class="fixed">
+        
+        
+        <a target="_blank" id="aNewTab"></a>
+        <table width="100%" cellpadding="0" cellspacing="0">
+            
+            
+        </table>
+    </div>
+    <div id="content">
+        <div id="ctl00_pnlFooter">
+	
+                </div><table width="100%" cellpadding="0" cellspacing="0">
+            <tbody><tr>
+                <td>
+                    <div id="divContent" style="display: block;">
+                        <div id="divWait" style="display: none;">
+                            <table class="innerTable">
+                                <tbody><tr>
+                                    <td align="center">
+                                        <table>
+                                            <tbody><tr>
+                                                <td valign="middle">
+                                                    <img id="ctl00_imgProcessing" src="./Accept _ Decline Order_files/processing.gif" alt="Processing ">
+                                                </td>
+                                                <td valign="middle">
+                                                    Please wait while the page is loading...
+                                                </td>
+                                            </tr>
+                                        </tbody></table>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                        </div>
+                        <div>
+                            
+                        </div>                        
+                        
+    <table width="1024px">
+        <tbody><tr>
+            <td align="center">
+                <div id="ctl00_Body_pnlAccept">
+	
+                        </div><table class="innerTable">
+                    <tbody><tr>
+                        <td class="center">
+                            <span id="ctl00_Body_lblErrorMessage" class="error" style="font-weight:bold;"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                            <td align="left">
+                                <table class="default">
+                                    <tbody><tr>
+                                        <td align="right">
+                                            <img src="./Accept _ Decline Order_files/information.png" alt="Information" height="24" width="24">
+                                        </td>
+                                        <td>
+                                            Please confirm the acceptance by clicking the <b>"Accept Order"</b> button below.
+                                            <span id="ctl00_Body_Label1"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            
+                                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <table class="innerTable">
+                                                <tbody><tr>
+                                                    <td valign="middle">
+                                                        <img src="./Accept _ Decline Order_files/stop.jpg" alt="STOP" height="36" width="36">
+                                                    </td>
+                                                    <td>
+                                                        If you have done a report on this address in the last
+                                                        <span id="ctl00_Body_lblAssignmentMonths">6</span>
+                                                        months, are the listing agent, contact person or borrower, are in the same brokerage
+                                                        as the POC or listing agent, or are aware of any other potential conflict of interest
+                                                        - Stop, call AssetVal immediately! - You may not be eligible for payment for this assignment.
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" width="150px">
+                                            <b>Due Date:</b>
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblDueDate" class="msg">6/6/2024 Due By 08:00 AM (PST)</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Project:</b>
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblProject">MRC00111</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Address:</b>
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblOrderAddress" class="msg">5911 Highway 20 S, Covington, GA 30016</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Inspection Type:</b>
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblInspectionType" class="msg">EXTERIOR</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Loan Key:</b>
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblLoanKey">XXXXX5372</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Borrower:</b>
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblBorrowerName"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Payment:</b>
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblPayment">$50.00</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">
+                                            <b>Special Instructions:</b>
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblSpecialInstructions"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Property Type:</b>
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblPropertyType" class="msg"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            <span id="ctl00_Body_lblPropertyTypeAlert" class="error"><b>NOTE</b> : If the Property Type provided by the Client is incorrect, contact AssetVal IMMEDIATELY. <br>DO NOT proceed with the order until the discrepancy is resolved.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center" colspan="2">
+                                            <input type="submit" name="ctl00$Body$btnAccept" value="Accept Order" onclick="return confirmAccept();WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$Body$btnAccept&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="ctl00_Body_btnAccept" class="btnOrderAccept">&nbsp;
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody></table>
+                            </td>
+                        </tr>
+                    
+
+                    
+                    
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody></table>
+    <!--Hidden Controls-->
+    <input type="hidden" name="ctl00$Body$hdnBpocd" id="ctl00_Body_hdnBpocd" value="AV0004649502">
+    <input type="hidden" name="ctl00$Body$hdnRealtorCd" id="ctl00_Body_hdnRealtorCd" value="AV0004318863">
+    <input type="hidden" name="ctl00$Body$hdnRealtorLogin" id="ctl00_Body_hdnRealtorLogin" value="Link">
+    <input type="hidden" name="ctl00$Body$hdnRealtorEmail" id="ctl00_Body_hdnRealtorEmail" value="philanarealty@gmail.com">
+    <input type="hidden" name="ctl00$Body$hdnRealtorEmailCC" id="ctl00_Body_hdnRealtorEmailCC">
+    <input type="hidden" name="ctl00$Body$hdnClose" id="ctl00_Body_hdnClose" value="o">
+    <input type="hidden" name="ctl00$Body$hdnHasSpecialInstruction" id="ctl00_Body_hdnHasSpecialInstruction">
+    <input type="hidden" name="ctl00$Body$hdnInteriorOrder" id="ctl00_Body_hdnInteriorOrder">
+
+    <input type="hidden" name="ctl00$Body$hdnIsAutoDeclined" id="ctl00_Body_hdnIsAutoDeclined" value="0">
+    <input type="hidden" name="ctl00$Body$hdnMailFrom" id="ctl00_Body_hdnMailFrom">
+    <input type="hidden" name="ctl00$Body$hdnMailTo" id="ctl00_Body_hdnMailTo">
+    <input type="hidden" name="ctl00$Body$hdnMailCc" id="ctl00_Body_hdnMailCc">
+    <input type="hidden" name="ctl00$Body$hdnMailBcc" id="ctl00_Body_hdnMailBcc">
+    <input type="hidden" name="ctl00$Body$hdnMailSubject" id="ctl00_Body_hdnMailSubject">
+    <input type="hidden" name="ctl00$Body$hdnMailBody" id="ctl00_Body_hdnMailBody">
+    <input type="hidden" name="ctl00$Body$hdnIsLockBox" id="ctl00_Body_hdnIsLockBox" value="0">
+    <input type="hidden" name="ctl00$Body$hdnPOC" id="ctl00_Body_hdnPOC">
+    <input type="hidden" name="ctl00$Body$hdnLenderCd" id="ctl00_Body_hdnLenderCd" value="AV0003612573">
+
+    <div class="hidden">
+        <input name="ctl00$Body$txtDeclineFrom" type="text" id="ctl00_Body_txtDeclineFrom" class="txt" style="height:80px;width:300px;">
+        <input name="ctl00$Body$txtDeclineTo" type="text" id="ctl00_Body_txtDeclineTo" class="txt" style="height:80px;width:300px;">
+        <input name="ctl00$Body$txtDeclineCc" type="text" id="ctl00_Body_txtDeclineCc" class="txt" style="height:80px;width:300px;">
+        <input name="ctl00$Body$txtDeclineBcc" type="text" id="ctl00_Body_txtDeclineBcc" class="txt" style="height:80px;width:300px;">
+        <input name="ctl00$Body$txtDeclineSubject" type="text" id="ctl00_Body_txtDeclineSubject" class="txt" style="height:80px;width:300px;">
+        <input name="ctl00$Body$txtDeclineBody" type="text" id="ctl00_Body_txtDeclineBody" class="txt" style="height:80px;width:300px;">
+    </div>
+
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                    <td align="center">
+                        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #355C8E;
+                            height: 50px;">
+                            <tbody><tr>
+                                <td align="center" class="footerMenu">
+                                    <a href="https://www.assetval.com/" id="a7">Home</a> <span>| </span><a href="https://www.assetval.com/about.html">
+                                            About Us</a> <span>| </span><a href="https://www.assetval.com/services-appraisal.html">
+                                                Products &amp; Services</a> <span>| </span><a href="https://www.assetval.com/partners-affiliates.html">
+                                                    Partner &amp; Affiliates</a> <span>| </span><a href="https://www.assetval.com/community-giving.html">
+                                                        Community &amp; Giving</a> <span>| </span><a href="https://www.assetval.com/contact.html">
+                                                            Contact Us</a> <span>| </span><a href="https://avm.assetval.com/Templates/SystemDescription.pdf" target="_blank">System Description</a> <span>| </span><a href="https://avm.assetval.com/Templates/Vendor%20Privacy%20Policy.pdf" target="_blank">Privacy Policy</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" class="copyright">
+                                    <span id="ctl00_lblCopyRight">Copyright © 2024 AssetVal. All Rights Reserved</span>&nbsp;
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+            
+
+        </tbody></table>
+    </div>
+    <!--Hidden Controls-->
+    <input type="hidden" name="ctl00$hdnDateTime" id="ctl00_hdnDateTime">
+    <input type="hidden" name="ctl00$hdnMnts" id="ctl00_hdnMnts">
+    <input type="hidden" name="ctl00$hdnSecs" id="ctl00_hdnSecs">
+    </form>
+
+
+</body></html>
